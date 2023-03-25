@@ -43,16 +43,13 @@ pub fn not_found(req: &Request<'_>) -> Template {
 
 // https://docs.rs/rocket/0.5.0-rc.2/rocket/fs/struct.FileServer.html#example
 #[shuttle_runtime::main]
-async fn rocket(#[shuttle_static_folder::StaticFolder] _static_folder: PathBuf) -> shuttle_rocket::ShuttleRocket {
+async fn rocket(#[shuttle_static_folder::StaticFolder(folder="templates")] _static_folder: PathBuf) -> shuttle_rocket::ShuttleRocket {
 
     let rocket = rocket::build().mount("/hello", routes![index])
         .mount("/", routes![index, hello, button_clicked, a_clicked])
-        .mount("/", FileServer::from(relative!("static/public")))
+        .mount("/", FileServer::from(relative!("templates/public")))
         .register("/", catchers![not_found])
         .attach(Template::fairing())
-
         ;
-    // Note, the above does not use the PathBuf, it is just relative to the crate.
-    // TODO experiments:.  add the templates fairing.  see if I can keep public and templates separate (under static)
     Ok(rocket.into())
 }
