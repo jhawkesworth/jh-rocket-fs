@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<body>
+<script src="../htmx.min.js"></script>
+<section id="hello">
+    <h1>Hi {{ name }}!</h1>
+    <h3>Here are your items:</h3>
+    <ul>
+        {{#each items}}
+            <li>{{ this }}</li>
+        {{/each}}
+    </ul>
+</section>
+
+<section id="custom-helper">
+    <p>Try going to <a href="/hello/Your%20Name">/hello/Your Name</a>.</p>
+
+</section>
+<section id="htmx-demo">
+
+    <!-- have a button POST a click via AJAX -->
+    <button hx-post="/clicked" hx-swap="outerHTML">
+        Click Me
+    </button>
+
+</section>
+
+</body>
+{{> layout}}

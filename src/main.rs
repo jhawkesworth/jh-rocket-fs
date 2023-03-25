@@ -2,10 +2,42 @@
 extern crate rocket;
 use rocket::fs::{FileServer, relative};
 use std::path::PathBuf;
+use rocket::Request;
+use rocket::response::Redirect;
+use rocket_dyn_templates::Template;
+use rocket_dyn_templates::context;
 
 #[get("/")]
-fn index() -> &'static str {
-    "Hello, world!"
+fn index() -> Redirect {
+    Redirect::to(uri!("/", hello(name = "Your Name")))
+}
+#[get("/hello/<name>")]
+pub fn hello(name: &str) -> Template {
+    Template::render("templates/index", context! {
+        title: "Hello",
+        name: Some(name),
+        items: vec!["One", "Two", "Three"],
+    })
+}
+#[post("/clicked")]
+pub fn button_clicked() -> Template {
+    Template::render("templates/no_button", context! {
+        message: "You Replaced the Button"
+    })
+}
+
+#[post("/button")]
+pub fn a_clicked() -> Template {
+    Template::render("templates/button", context! {
+        message: "You Got the button back"
+    })
+}
+
+#[catch(404)]
+pub fn not_found(req: &Request<'_>) -> Template {
+    Template::render("templates/error/404", context! {
+        uri: req.uri()
+    })
 }
 
 
@@ -14,10 +46,13 @@ fn index() -> &'static str {
 async fn rocket(#[shuttle_static_folder::StaticFolder] _static_folder: PathBuf) -> shuttle_rocket::ShuttleRocket {
 
     let rocket = rocket::build().mount("/hello", routes![index])
-        //.mount("/public", FileServer::from("/opt/shuttle/shuttle-builds/jh-rocket-fs/static"))
-        // ^ if do this, must first symlink the folder so you can cargo shuttle run locally
-        .mount("/public", FileServer::from(relative!("static")));
-        // Note, the above does not use the PathBuf, it is just relative to the crate.
-    // TODO experiments:.  add the templates fairing.
+        .mount("/", routes![index, hello, button_clicked, a_clicked])
+        .mount("/", FileServer::from(relative!("static/public")))
+        .register("/", catchers![not_found])
+        .attach(Template::fairing())
+
+        ;
+    // Note, the above does not use the PathBuf, it is just relative to the crate.
+    // TODO experiments:.  add the templates fairing.  see if I can keep public and templates separate (under static)
     Ok(rocket.into())
 }
