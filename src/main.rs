@@ -17,6 +17,7 @@ async fn rocket(#[shuttle_static_folder::StaticFolder] _static_folder: PathBuf) 
         //.mount("/public", FileServer::from("/opt/shuttle/shuttle-builds/jh-rocket-fs/static"))
         // ^ if do this, must first symlink the folder so you can cargo shuttle run locally
         .mount("/public", FileServer::from(relative!("static")));
-
+        // Note, the above does not use the PathBuf, it is just relative to the crate.
+    // TODO experiments:.  add the templates fairing.
     Ok(rocket.into())
 }
