@@ -18,6 +18,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7de8ce5e0f9f8d88245311066a578d72b7af3e7088f32783804676302df237e4"
 
 [[package]]
+name = "arrayvec"
+version = "0.7.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8da52d66c7071e2e3fa2a1e5c6d088fec47b593032b254f5e980de8ea54454d6"
+
+[[package]]
 name = "async-stream"
 version = "0.3.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1807,10 +1813,11 @@ dependencies = [
 
 [[package]]
 name = "rustrict"
-version = "0.5.14"
+version = "0.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b58f081ae05d5aed312a70ff881f145c144ce9b7742e4d5e4a3307a1cf3932f2"
+checksum = "51873ee45dae28c00a079be7dd004fbf59991e0105d3508660ce8ca24da5dd85"
 dependencies = [
+ "arrayvec",
  "bitflags 1.3.2",
  "doc-comment",
  "finl_unicode",
@@ -1924,9 +1931,9 @@ dependencies = [
 
 [[package]]
 name = "shuttle-codegen"
-version = "0.12.0"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "62ab84d6d8ad69d002678d3097a5dde34af3cbd36b3f32539e2757e8be6db5b8"
+checksum = "1099301a3437f6503db81271975e644c5e1aad9fe6170025e38f5e2f3e1ead79"
 dependencies = [
  "proc-macro-error",
  "proc-macro2",
@@ -1936,9 +1943,9 @@ dependencies = [
 
 [[package]]
 name = "shuttle-common"
-version = "0.12.0"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1583995bc70cc9a11d30c98970953a97303a0fe3408feb7dad893e19dd7debdf"
+checksum = "20e5f49c3ea8bc7c6ff3bc1c28c684849352c9cca1387b176970b421a96ab2ba"
 dependencies = [
  "async-trait",
  "axum",
@@ -1973,9 +1980,9 @@ dependencies = [
 
 [[package]]
 name = "shuttle-proto"
-version = "0.12.0"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d572fab2ef3b6b526a5fe73098673034a070995b3c3a00d3630632fc11769f4c"
+checksum = "b87f6be4af7b511219d9039d3d54ec452fafe66ed9feb8e008061ca6d90c7099"
 dependencies = [
  "anyhow",
  "chrono",
@@ -1992,9 +1999,9 @@ dependencies = [
 
 [[package]]
 name = "shuttle-rocket"
-version = "0.12.0"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eecc1336a904ecd051b31e4a9d8016e881ef00048718c81f189557794bf290b8"
+checksum = "4aca704bc772f2fcdf08afc7556335f9ffff102739512f37613cb9a4db0f5ab8"
 dependencies = [
  "rocket",
  "shuttle-runtime",
@@ -2002,15 +2009,16 @@ dependencies = [
 
 [[package]]
 name = "shuttle-runtime"
-version = "0.12.0"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ce672a71e08bd14eb1950e0fa71ab4c3fcc969ade879c77cd23ae4465d2275a4"
+checksum = "f8ebc8c57f9f366488b85e54cc0bb61a47d22ceb2dd45d6090034ba55676c7e1"
 dependencies = [
  "anyhow",
  "async-trait",
  "chrono",
  "clap",
  "prost-types",
+ "serde",
  "serde_json",
  "shuttle-common",
  "shuttle-proto",
@@ -2027,12 +2035,13 @@ dependencies = [
 
 [[package]]
 name = "shuttle-service"
-version = "0.12.0"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c364a8e02ae1882fb549b90a9d38a49b660c40df8e06c008a51ed9ad74249a1b"
+checksum = "2cc895240b1a94c80d195e951718fe2bbe10249114cc26c5fb5cd500890b8a21"
 dependencies = [
  "anyhow",
  "async-trait",
+ "serde",
  "shuttle-codegen",
  "shuttle-common",
  "strfmt",
@@ -2041,12 +2050,13 @@ dependencies = [
 
 [[package]]
 name = "shuttle-static-folder"
-version = "0.12.0"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "59d25c8b44f61ac62c1ac634ef71c882bc898b466bc69a596003b05c010151d1"
+checksum = "33e9390a5389eeabbfaaa295af8914df6b444aed83d1289a039081a050727750"
 dependencies = [
  "async-trait",
  "fs_extra",
+ "serde",
  "shuttle-service",
  "tracing",
 ]
@@ -2425,9 +2435,9 @@ dependencies = [
 
 [[package]]
 name = "tower-http"
-version = "0.3.5"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f873044bf02dd1e8239e9c1293ea39dad76dc594ec16185d0a1bf31d8dc8d858"
+checksum = "5d1d42a9b3f3ec46ba828e8d376aec14592ea199f70a06a548587ecd1c4ab658"
 dependencies = [
  "bitflags 1.3.2",
  "bytes",
