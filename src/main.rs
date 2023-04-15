@@ -43,9 +43,11 @@ pub fn not_found(req: &Request<'_>) -> Template {
 
 // https://docs.rs/rocket/0.5.0-rc.2/rocket/fs/struct.FileServer.html#example
 #[shuttle_runtime::main]
-async fn rocket(#[shuttle_static_folder::StaticFolder(folder="templates")] _static_folder: PathBuf) -> shuttle_rocket::ShuttleRocket {
+async fn rocket(#[shuttle_static_folder::StaticFolder(folder="templates")] static_folder: PathBuf) -> shuttle_rocket::ShuttleRocket {
 
-    let rocket = rocket::build().mount("/hello", routes![index])
+    let template_dir = static_folder.to_str().unwrap();
+    let figment = rocket::Config::figment().merge(("template_dir", template_dir));
+    let rocket = rocket::custom(figment).mount("/hello", routes![index])
         .mount("/", routes![index, hello, button_clicked, a_clicked])
         .mount("/", FileServer::from(relative!("templates/public")))
         .register("/", catchers![not_found])
